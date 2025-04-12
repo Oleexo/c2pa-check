@@ -25,3 +25,7 @@ go.work.sum
 .env
 
 *.tar.gz
+
+# Added by cargo
+
+/target
