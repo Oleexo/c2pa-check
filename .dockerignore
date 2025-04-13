@@ -1,0 +1,7 @@
+/target
+**Dockerfile
+.dockerignore
+.gitignore
+.idea
+compose.yml
+README.md
