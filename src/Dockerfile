@@ -1,4 +1,4 @@
-FROM rust:1.86
+FROM rust:1.86 as builder
 LABEL authors="maxim"
 
 WORKDIR /build
@@ -23,5 +23,8 @@ COPY [ "src/", "src" ]
 
 RUN cargo build --release
 
+FROM debian:bookworm as final
+WORKDIR /app
+COPY --from=builder /build/target/release/c2pa-check .
 
-ENTRYPOINT ["top", "-b"]
+ENTRYPOINT ["sleep", "1000000"]
