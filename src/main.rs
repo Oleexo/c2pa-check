@@ -57,8 +57,13 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
     (Status::Ok, (ContentType::JSON, json_response))
 }
 
-#[get("/healthz")]
-fn readiness() -> &'static str {
+#[get("/health")]
+fn health() -> &'static str {
+    "OK"
+}
+
+#[get("/live")]
+fn live() -> &'static str {
     "OK"
 }
 
@@ -70,4 +75,5 @@ fn rocket() -> _ {
         ..Default::default()
     };
     rocket::custom(config).mount("/", routes![index, check])
+        .mount("/live", routes![health, live])
 }
