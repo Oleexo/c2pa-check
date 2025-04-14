@@ -30,13 +30,13 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
     // Step 2: Open the TempFile for reading
     let file = match form.file.open().await {
         Ok(file) => file,
-        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"hi\": \"world\" }".to_string())),
+        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"message\": \"world\" }".to_string())),
     };
     // Step 3: Read the TempFile's contents into the buffer
     let mut reader = tokio::io::BufReader::new(file);
     match reader.read_to_end(&mut buffer).await {
         Ok(_) => (),
-        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"hi\": \"world\" }".to_string())),
+        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"message\": \"world\" }".to_string())),
     }
 
     let content_type : &ContentType;
@@ -61,6 +61,7 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
 fn rocket() -> _ {
     let config = Config {
         port: 8080,
+        address: "0.0.0.0".parse().unwrap(),
         ..Default::default()
     };
     rocket::custom(config).mount("/", routes![index, check])
