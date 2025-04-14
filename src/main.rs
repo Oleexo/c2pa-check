@@ -57,6 +57,11 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
     (Status::Ok, (ContentType::JSON, json_response))
 }
 
+#[get("/healthz")]
+fn readiness() -> &'static str {
+    "OK"
+}
+
 #[launch]
 fn rocket() -> _ {
     let config = Config {
