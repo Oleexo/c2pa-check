@@ -18,7 +18,7 @@ pub struct CawgValidator;
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello, world!"
+    "Hello, I'm C2PA check !"
 }
 
 #[post("/check", data = "<form>")]
