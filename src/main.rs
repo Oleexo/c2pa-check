@@ -1,6 +1,6 @@
 #[macro_use] extern crate rocket;
 
-use std::io::{Cursor, Read};
+use std::io::{Cursor};
 use c2pa::Reader;
 use rocket::Config;
 use rocket::http::{Status, ContentType};
@@ -22,7 +22,7 @@ fn index() -> &'static str {
 }
 
 #[post("/check", data = "<form>")]
-async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
+async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
 
     // Step 1: Create a buffer to hold the file's contents
     let mut buffer = Vec::new();
@@ -30,13 +30,13 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
     // Step 2: Open the TempFile for reading
     let file = match form.file.open().await {
         Ok(file) => file,
-        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"error\": \"Failed to process the file\" }".to_string())),
+        Err(_e) => return (Status::BadRequest, (ContentType::JSON, "{ \"error\": \"Failed to process the file\" }".to_string())),
     };
     // Step 3: Read the TempFile's contents into the buffer
     let mut reader = tokio::io::BufReader::new(file);
     match reader.read_to_end(&mut buffer).await {
         Ok(_) => (),
-        Err(e) => return (Status::BadRequest, (ContentType::JSON, "{ \"error\": \"Failed to read the file contents\" }".to_string())),
+        Err(_e) => return (Status::BadRequest, (ContentType::JSON, "{ \"error\": \"Failed to read the file contents\" }".to_string())),
     }
 
     let content_type : &ContentType;
@@ -48,7 +48,7 @@ async fn check(mut form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)
 
     let stream = Cursor::new(buffer);
     // Create the reader from the stream
-    let mut reader = match Reader::from_stream(content_type.to_string().as_str(), stream) {
+    let reader = match Reader::from_stream(content_type.to_string().as_str(), stream) {
         Ok(reader) => reader,
         Err(e) => return (Status::BadRequest, (ContentType::JSON, format!("{{ \"message\": \"{}\" }}", e.to_string()).to_string())),
     };
