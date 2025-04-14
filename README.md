@@ -70,7 +70,3 @@ To run without Docker:
 ``` bash
 cargo run
 ```
-## License
-[Add your license information here]
-## Contributing
-[Add contributing guidelines if applicable]
