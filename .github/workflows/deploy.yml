@@ -3,6 +3,11 @@ name: Deploy to DockerHub
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "**.rs"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 jobs:
