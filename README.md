@@ -13,7 +13,15 @@ The Coalition for Content Provenance and Authenticity (C2PA) is an open technica
 - Curl (for testing)
 
 ## Installation
+### Option 1: Pull the Docker image directly
+Pull the pre-built Docker image:
+``` bash
+docker pull oleexo/c2pa-check
+```
+
+### Option 2: Clone and build from source
 Clone this repository:
+
 ``` bash
 git clone https://github.com/yourusername/c2pa-check.git
 cd c2pa-check
