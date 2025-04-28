@@ -1,4 +1,4 @@
-FROM rust:1.86 as builder
+FROM rust:1.86 AS builder
 LABEL authors="oleexo"
 
 WORKDIR /build
@@ -17,7 +17,7 @@ COPY [ "src/", "src" ]
 
 RUN cargo build --release
 
-FROM debian:bookworm-slim as final
+FROM debian:bookworm-slim AS final
 EXPOSE 8080
 WORKDIR /app
 
