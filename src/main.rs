@@ -3,6 +3,7 @@
 use std::io::{Cursor};
 use c2pa::Reader;
 use rocket::Config;
+use rocket::data::{Limits, ToByteUnit};
 use rocket::http::{Status, ContentType};
 use rocket::fs::TempFile;
 use rocket::form::Form;
@@ -11,6 +12,7 @@ use tokio::io::AsyncReadExt;
 
 #[derive(FromForm)]
 struct FileUpload<'r> {
+    #[field(validate = len(..10.mebibytes()))]
     file: TempFile<'r>,
 }
 
@@ -59,12 +61,12 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
     (Status::Ok, (ContentType::JSON, json_response))
 }
 
-#[get("/health")]
+#[get("/healtz/health")]
 fn health() -> &'static str {
     "OK"
 }
 
-#[get("/live")]
+#[get("/healtz/live")]
 fn live() -> &'static str {
     "OK"
 }
@@ -72,12 +74,21 @@ fn live() -> &'static str {
 #[launch]
 fn rocket() -> _ {
     debug!("Starting server");
+    
+    let limits = Limits::new()
+        .limit("forms", 10.mebibytes())
+        .limit("file", 10.mebibytes())
+        .limit("data-form", 10.mebibytes())
+        .limit("file_field", 10.mebibytes());
+
     let config = Config {
         port: 8080,
         address: "0.0.0.0".parse().unwrap(),
         log_level: rocket::config::LogLevel::Debug,
+        limits,
         ..Default::default()
     };
+    
     rocket::custom(config).mount("/", routes![index, check])
         .mount("/live", routes![health, live])
 }
