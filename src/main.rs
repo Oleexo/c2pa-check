@@ -61,12 +61,12 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
     (Status::Ok, (ContentType::JSON, json_response))
 }
 
-#[get("/healtz/health")]
+#[get("/healthz/health")]
 fn health() -> &'static str {
     "OK"
 }
 
-#[get("/healtz/live")]
+#[get("/healthz/live")]
 fn live() -> &'static str {
     "OK"
 }
