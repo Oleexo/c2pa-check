@@ -1,4 +1,4 @@
-FROM rust:1.86 as builder
+FROM rust:1.86 AS builder
 LABEL authors="oleexo"
 
 WORKDIR /build
@@ -10,14 +10,15 @@ RUN apt-get update && apt-get install -y \
     curl
 
 COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo build --release
+#RUN mkdir src && echo "fn main() {}" > src/main.rs
+#RUN cargo build --release
+#RUN rm /build/target/release/c2pa-check && rm src/main.rs
 
 COPY [ "src/", "src" ]
 
 RUN cargo build --release
 
-FROM debian:bookworm-slim as final
+FROM debian:bookworm-slim AS final
 EXPOSE 8080
 WORKDIR /app
 

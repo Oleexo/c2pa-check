@@ -26,6 +26,7 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
 
     // Step 1: Create a buffer to hold the file's contents
     let mut buffer = Vec::new();
+    debug!("Starting file processing");
 
     // Step 2: Open the TempFile for reading
     let file = match form.file.open().await {
@@ -35,7 +36,7 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
     // Step 3: Read the TempFile's contents into the buffer
     let mut reader = tokio::io::BufReader::new(file);
     match reader.read_to_end(&mut buffer).await {
-        Ok(_) => (),
+        Ok(_) => debug!("Successfully read file contents"),
         Err(_e) => return (Status::BadRequest, (ContentType::JSON, "{ \"error\": \"Failed to read the file contents\" }".to_string())),
     }
 
@@ -47,6 +48,7 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
     }
 
     let stream = Cursor::new(buffer);
+    debug!("Starting C2PA validation");
     // Create the reader from the stream
     let reader = match Reader::from_stream(content_type.to_string().as_str(), stream) {
         Ok(reader) => reader,
@@ -69,9 +71,11 @@ fn live() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
+    debug!("Starting server");
     let config = Config {
         port: 8080,
         address: "0.0.0.0".parse().unwrap(),
+        log_level: rocket::config::LogLevel::Debug,
         ..Default::default()
     };
     rocket::custom(config).mount("/", routes![index, check])
