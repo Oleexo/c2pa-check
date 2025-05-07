@@ -7,6 +7,7 @@ on:
       - "**.rs"
       - "Cargo.toml"
       - "Cargo.lock"
+      - "src/Dockerfile"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
