@@ -5,5 +5,5 @@ edition = "2024"
 
 [dependencies]
 rocket = "0.5.1"
-c2pa = { version = "0.49.4", features = ["file_io"] }
+c2pa = { version = "0.49.5", features = ["file_io"] }
 tokio = "1.44.2"
