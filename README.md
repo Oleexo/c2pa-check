@@ -36,7 +36,7 @@ The service will be available at `http://localhost:8080`.
 ### API Endpoints
 #### Health Check
 ``` 
-GET /healthz/health
+GET /healthz/ready
 GET /healthz/live
 ```
 Returns "OK" when the service is running correctly.
