@@ -10,12 +10,11 @@ RUN apt-get update && apt-get install -y \
     curl
 
 COPY Cargo.toml Cargo.lock ./
-#RUN mkdir src && echo "fn main() {}" > src/main.rs
-#RUN cargo build --release
-#RUN rm /build/target/release/c2pa-check && rm src/main.rs
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release
 
 COPY [ "src/", "src" ]
-
+RUN touch src/main.rs
 RUN cargo build --release
 
 FROM debian:bookworm-slim AS final
