@@ -61,12 +61,12 @@ async fn check(form: Form<FileUpload<'_>>) -> (Status, (ContentType, String)) {
     (Status::Ok, (ContentType::JSON, json_response))
 }
 
-#[get("/healthz/health")]
+#[get("/ready")]
 fn health() -> &'static str {
     "OK"
 }
 
-#[get("/healthz/live")]
+#[get("/live")]
 fn live() -> &'static str {
     "OK"
 }
@@ -90,5 +90,5 @@ fn rocket() -> _ {
     };
     
     rocket::custom(config).mount("/", routes![index, check])
-        .mount("/live", routes![health, live])
+        .mount("/healthz", routes![health, live])
 }
