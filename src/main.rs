@@ -2,17 +2,18 @@
 
 use std::io::{Cursor};
 use c2pa::Reader;
+use prometheus::process_collector::ProcessCollector;
 use rocket::Config;
 use rocket::data::{Limits, ToByteUnit};
 use rocket::http::{Status, ContentType};
 use rocket::fs::TempFile;
 use rocket::form::Form;
 use tokio::io::AsyncReadExt;
+use rocket_prometheus::{PrometheusMetrics};
 
 
 #[derive(FromForm)]
 struct FileUpload<'r> {
-    #[field(validate = len(..10.mebibytes()))]
     file: TempFile<'r>,
 }
 
@@ -74,12 +75,16 @@ fn live() -> &'static str {
 #[launch]
 fn rocket() -> _ {
     debug!("Starting server");
-    
+
+
+    let file_size_limit = std::env::var("FILE_SIZE_LIMIT_MB")
+        .ok()
+        .and_then(|s| s.parse::<u64>().ok())
+        .unwrap_or(10);
+
     let limits = Limits::new()
-        .limit("forms", 10.mebibytes())
-        .limit("file", 10.mebibytes())
-        .limit("data-form", 10.mebibytes())
-        .limit("file_field", 10.mebibytes());
+        .limit("file", file_size_limit.mebibytes())
+        .limit("data-form", file_size_limit.mebibytes());
 
     let config = Config {
         port: 8080,
@@ -88,7 +93,17 @@ fn rocket() -> _ {
         limits,
         ..Default::default()
     };
+
+    let process_collector = ProcessCollector::for_self();
     
-    rocket::custom(config).mount("/", routes![index, check])
+    let prometheus = PrometheusMetrics::new();
+    prometheus.registry()
+        .register(Box::new(process_collector))
+        .unwrap();
+
+    rocket::custom(config)
+        .attach(prometheus.clone())
+        .mount("/", routes![index, check])
         .mount("/healthz", routes![health, live])
+        .mount("/metrics", prometheus)
 }

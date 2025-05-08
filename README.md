@@ -12,6 +12,7 @@ The Coalition for Content Provenance and Authenticity (C2PA) is an open technica
 - Docker and Docker Compose
 - Curl (for testing)
 
+
 ## Installation
 ### Option 1: Pull the Docker image directly
 Pull the pre-built Docker image:
@@ -33,19 +34,14 @@ Start the service using Docker Compose:
 docker compose up
 ```
 The service will be available at `http://localhost:8080`.
-### API Endpoints
-#### Health Check
-``` 
-GET /healthz/ready
-GET /healthz/live
-```
-Returns "OK" when the service is running correctly.
-#### Homepage
-``` 
-GET /
-```
-Returns a simple welcome message.
-#### C2PA Verification
+
+## Configuration
+### Environment Variables
+
+- `FILE_SIZE_LIMIT_MB`: Maximum file size limit in megabytes for uploaded files (default: 10)
+
+## API Endpoints
+### C2PA Verification
 ``` 
 POST /check
 ```
@@ -56,19 +52,35 @@ Submit a file via multipart form data to check for C2PA manifests.
 **Response:**
 - JSON object containing the C2PA manifest data or an error message
 
-### Example
+#### Example
 To test with a sample image:
 ``` bash
 curl -X POST http://localhost:8080/check -v \
   -F "file=@/path/to/your/image.jpg" \
   -H "Content-Type: multipart/form-data"
 ```
+### Health Check
+``` 
+GET /healthz/ready
+GET /healthz/live
+```
+Returns "OK" when the service is running correctly.
+### Prometheus
+```
+GET /metrics
+```
+Returns prometheus metrics with `process*` and `rocket_*` for http web metrics
+### Homepage
+``` 
+GET /
+```
+Returns a simple welcome message.
 ## Development
 This project is built with:
 - Rust 1.86.0
-- Rocket 0.5.1 (web framework)
-- c2pa 0.49.2 (Content Credentials SDK)
-- Tokio 1.44.2 (async runtime)
+- Rocket 0.5.x (web framework)
+- c2pa 0.49.x (Content Credentials SDK)
+- Tokio 1.44.x (async runtime)
 
 To build locally:
 ``` bash
