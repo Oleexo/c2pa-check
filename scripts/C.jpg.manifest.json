@@ -1,0 +1,99 @@
+{
+  "active_manifest": "contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5",
+  "manifests": {
+    "contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5": {
+      "claim_generator": "make_test_images/0.12.0 c2pa-rs/0.12.0",
+      "title": "C.jpg",
+      "format": "image/jpeg",
+      "instance_id": "xmp:iid:e928fac1-8473-4c70-8219-369e91d4e58d",
+      "thumbnail": {
+        "format": "image/jpeg",
+        "identifier": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/c2pa.thumbnail.claim.jpeg"
+      },
+      "ingredients": [],
+      "assertions": [
+        {
+          "label": "stds.schema-org.CreativeWork",
+          "data": {
+            "@context": "http://schema.org/",
+            "@type": "CreativeWork",
+            "author": [
+              {
+                "@type": "Person",
+                "name": "Gavin Peacock"
+              }
+            ]
+          },
+          "kind": "Json"
+        },
+        {
+          "label": "c2pa.actions",
+          "data": {
+            "actions": [
+              {
+                "action": "c2pa.created"
+              },
+              {
+                "action": "c2pa.drawing",
+                "parameters": {
+                  "name": "gradient"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "signature_info": {
+        "alg": "Ps256",
+        "issuer": "C2PA Test Signing Cert",
+        "cert_serial_number": "720724073027128164015125666832722375746636448153",
+        "time": "2022-08-19T19:03:41+00:00"
+      },
+      "label": "contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5"
+    }
+  },
+  "validation_results": {
+    "activeManifest": {
+      "success": [
+        {
+          "code": "claimSignature.insideValidity",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.signature",
+          "explanation": "claim signature valid"
+        },
+        {
+          "code": "claimSignature.validated",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.signature",
+          "explanation": "claim signature valid"
+        },
+        {
+          "code": "assertion.hashedURI.match",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/c2pa.thumbnail.claim.jpeg",
+          "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.thumbnail.claim.jpeg"
+        },
+        {
+          "code": "assertion.hashedURI.match",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/stds.schema-org.CreativeWork",
+          "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/stds.schema-org.CreativeWork"
+        },
+        {
+          "code": "assertion.hashedURI.match",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/c2pa.actions",
+          "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.actions"
+        },
+        {
+          "code": "assertion.hashedURI.match",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/c2pa.hash.data",
+          "explanation": "hashed uri matched: self#jumbf=c2pa.assertions/c2pa.hash.data"
+        },
+        {
+          "code": "assertion.dataHash.match",
+          "url": "self#jumbf=/c2pa/contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5/c2pa.assertions/c2pa.hash.data",
+          "explanation": "data hash valid"
+        }
+      ],
+      "informational": [],
+      "failure": []
+    }
+  },
+  "validation_state": "Valid"
+}

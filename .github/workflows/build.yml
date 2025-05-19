@@ -48,3 +48,13 @@ jobs:
       # Run tests
       - name: Run Tests
         run: cargo test --verbose
+        
+      - name: Basic test
+        run: |
+          nohup ./target/debug/c2pa-check > app.log 2>&1 &
+          while ! curl -s http://localhost:8000/healthz/live > /dev/null; do sleep 1; done
+          ./scripts/test.sh
+          TEST_EXIT_CODE=$?
+          kill %1 # Kill background process
+          exit $TEST_EXIT_CODE
+          
